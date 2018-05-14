@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Word Guess Game!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/reset.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css" />
+    <script src="assets/javascript/game.js"></script>
+</head>
+
+<body>
+    <div id="game">
+        <h1>Display any key to get started!</h1>
+        <p>Wins:
+            <span id="wins"></span>
+        </p>
+        <p>Current Word:
+            <span id="currentWord"></span>
+        </p>
+        <p>Number of guesses remaining:
+            <span id="guessLeft"></span>
+        </p>
+        <p>Letters already guessed:
+            <span id="letterUsed"></span>
+        </p>
+    </div>
+
+    <script>
+        var wordList = ["KatyPerry", "CarrieUnderwood", "TaylorSwift", "Beyonce", "MileyCyrus"];
+        var wins = 0;
+        var guessLeft = 12;
+        var answerArray = [];
+        var word = wordList[Math.floor(Math.random() * wordList.length)]
+        function setScoreboardValues(anything, anythingElse) {
+            document.getElementById(anything).textContent = anythingElse;
+        }
+
+        for (i = 0; i < wordList.length; i++) {
+            answerArray[i] = "_";
+            var remainingLetters = word.length;
+            while (remainingLetters > 0) {
+                document.write(answerArray.join(""))
+            }
+        }
+
+        document.onkeyup = function (event) {
+            var guess = event.key;
+            for (j = 0; j < word; j++) {
+                if (guess === word.charAt[i]) {
+                    setScoreboardValues("letterUsed",guess.toUpperCase());
+                    answerArray[j] = guess;
+                    setScoreboardValues("currentWord",answerArray);
+                    remainingLetters--
+                }
+                else {
+                    setScoreboardValues("letterUsed",guess.toUpperCase());
+                    guessLeft--;
+                    setScoreboardValues("guessLeft",guessLeft);
+                }
+            }
+            wins++;
+            setScoreboardValues("wins",wins);
+        }
+
+    </script>
+
+</body>
+
+</html>
