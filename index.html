@@ -32,7 +32,16 @@
         var wordList = ["KatyPerry", "CarrieUnderwood", "TaylorSwift", "Beyonce", "MileyCyrus"];
         var wins = 0;
         var guessLeft = 12;
+        var alreadyGuess = false;
+        var rightLeter = false;
         var answerArray = [];
+        var dir = 'music/';
+        var playlist = ['Recess', 'Animaniacs'];
+        var ext = '.mp3';
+        var audio = new Audio();
+        function game () {
+            
+        }
         var word = wordList[Math.floor(Math.random() * wordList.length)]
         function setScoreboardValues(anything, anythingElse) {
             document.getElementById(anything).textContent = anythingElse;
@@ -64,6 +73,8 @@
             wins++;
             setScoreboardValues("wins",wins);
         }
+
+        
 
     </script>
 
