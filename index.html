@@ -3,81 +3,124 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Word Guess Game!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="assets/css/reset.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css" />
-    <script src="assets/javascript/game.js"></script>
 </head>
 
 <body>
-    <div id="game">
-        <h1>Display any key to get started!</h1>
-        <p>Wins:
-            <span id="wins"></span>
-        </p>
-        <p>Current Word:
-            <span id="currentWord"></span>
-        </p>
-        <p>Number of guesses remaining:
-            <span id="guessLeft"></span>
-        </p>
-        <p>Letters already guessed:
-            <span id="letterUsed"></span>
-        </p>
-    </div>
-
     <script>
-        var wordList = ["KatyPerry", "CarrieUnderwood", "TaylorSwift", "Beyonce", "MileyCyrus"];
-        var wins = 0;
-        var guessLeft = 12;
-        var alreadyGuess = false;
-        var rightLeter = false;
-        var answerArray = [];
-        var dir = 'music/';
-        var playlist = ['Recess', 'Animaniacs'];
-        var ext = '.mp3';
-        var audio = new Audio();
-        function game () {
-            
-        }
-        var word = wordList[Math.floor(Math.random() * wordList.length)]
-        function setScoreboardValues(anything, anythingElse) {
-            document.getElementById(anything).textContent = anythingElse;
-        }
+        var singers =
+            [
+                "katyperry",
+                "carrieunderwood",
+                "taylorswift",
+                "beyonce",
+                "mileycyrus",
+            ];
 
-        for (i = 0; i < wordList.length; i++) {
-            answerArray[i] = "_";
-            var remainingLetters = word.length;
-            while (remainingLetters > 0) {
-                document.write(answerArray.join(""))
+        const maxTries = 12;
+        var guessedLetters = [];        // Stores the letters the user guessed
+        var currentWordIndex;           // Index of the current word in the array
+        var guessingWord = [];          // This will be the word to match the current word
+        var remainingGuesses = 12;
+        var gameStarted = false;        // Flag to tell if the game has started
+        var hasFinished = false;        // Flag for 'press any key to try again'     
+        var wins = 0;                   
+
+        // Reset game-level variables
+        function resetGame() {
+            remainingGuesses = maxTries;
+            gameStarted = false;
+            currentWordIndex = Math.floor(Math.random() * singers.length);
+
+            // Clear out arrays
+            guessedLetters = [];
+            guessingWord = [];
+
+            for (var i = 0; i < singers[currentWordIndex].length; i++) {
+                guessingWord.push("_");
             }
-        }
+
+            document.getElementById("pressKeyTryAgain");
+
+            updateDisplay();
+        };
+
+        //  Update the display
+        function updateDisplay() {
+
+            document.getElementById("totalWins").innerText = wins;
+            document.getElementById("currentWord").innerText = "";
+            for (var i = 0; i < guessingWord.length; i++) {
+                document.getElementById("currentWord").innerText += guessingWord[i];
+            }
+            document.getElementById("remainingGuesses").innerText = remainingGuesses;
+            document.getElementById("guessedLetters").innerText = guessedLetters;
+            if (remainingGuesses <= 0) {
+                document.getElementById("pressKeyTryAgain");
+                hasFinished = true;
+            }
+        };
 
         document.onkeyup = function (event) {
-            var guess = event.key;
-            for (j = 0; j < word; j++) {
-                if (guess === word.charAt[i]) {
-                    setScoreboardValues("letterUsed",guess.toUpperCase());
-                    answerArray[j] = guess;
-                    setScoreboardValues("currentWord",answerArray);
-                    remainingLetters--
-                }
-                else {
-                    setScoreboardValues("letterUsed",guess.toUpperCase());
-                    guessLeft--;
-                    setScoreboardValues("guessLeft",guessLeft);
+            if (hasFinished) {
+                resetGame();
+                hasFinished = false;
+            } else {
+                if (event.keyCode >= 65 && event.keyCode <= 90) {
+                    makeGuess(event.key.toLowerCase());
                 }
             }
-            wins++;
-            setScoreboardValues("wins",wins);
-        }
+        };
 
-        
+        function makeGuess(letter) {
+            if (remainingGuesses > 0) {
+                if (!gameStarted) {
+                    gameStarted = true;
+                }
+
+                // Make sure this letter hasn't been used yet
+                if (guessedLetters.indexOf(letter) === -1) {
+                    guessedLetters.push(letter);
+                    evaluateGuess(letter);
+                }
+            }
+
+            updateDisplay();
+            checkWin();
+        };
+
+        function evaluateGuess(letter) {
+            var positions = [];
+
+            for (var i = 0; i < singers[currentWordIndex].length; i++) {
+                if (singers[currentWordIndex][i] === letter) {
+                    positions.push(i);
+                }
+            }
+
+            if (positions.length <= 0) {
+                remainingGuesses--;
+            } else {
+                for (var i = 0; i < positions.length; i++) {
+                    guessingWord[positions[i]] = letter;
+                }
+            }
+        };
+
+        function checkWin() {
+            if (guessingWord.indexOf("_") === -1) {
+                document.getElementById("pressKeyTryAgain");
+                wins++;
+                hasFinished = true;
+            }
+        };
+
+        resetGame();
 
     </script>
-
 </body>
 
 </html>
