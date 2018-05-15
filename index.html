@@ -44,15 +44,13 @@
             }
 
             document.getElementById("pressKeyTryAgain");
-
-            updateDisplay();
         };
 
         //  Update the display
         function updateDisplay() {
 
             document.getElementById("totalWins").innerText = wins;
-            document.getElementById("currentWord").innerText = "";
+            document.getElementById("currentWord").innerText = "_";
             for (var i = 0; i < guessingWord.length; i++) {
                 document.getElementById("currentWord").innerText += guessingWord[i];
             }
@@ -117,8 +115,6 @@
                 hasFinished = true;
             }
         };
-
-        resetGame();
 
     </script>
 </body>
